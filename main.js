@@ -1,51 +1,55 @@
+
+
 class TreeView extends HTMLElement {
   constructor() {
       super();
       this.attachShadow({ mode: 'open' });
       this.shadow = this.shadowRoot;
-    }
+      this.data = []; 
+      this.urljson = this.getAttribute('dataUrl');
+  }
     
-    connectedCallback() {
-    this.data = JSON.parse(this.getAttribute('data'));
-    this.shadow.addEventListener("click", this.handleClick.bind(this));
-    this.shadow.addEventListener("change", this.handleChange.bind(this));
-    this.init();
+  connectedCallback() {
+      this.setData();
+      this.shadow.addEventListener("click", this.handleClick.bind(this));
+      this.shadow.addEventListener("change", this.handleChange.bind(this));
   }
 
-/*   static get observedAttributes() {
-    return ['data'];
+  setData() {
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch(this.urljson)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+        this.data = data;
+        this.render();
+      })
+      .catch(error => {
+          console.error('Error fetching data:', error);
+          // Aquí puedes manejar el error de manera adecuada, por ejemplo, mostrando un mensaje al usuario
+      });
+    });
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'data') {
-        this.data = JSON.parse(newValue);
-        this.init();
-    }
-  } */
-
-
-  stilo(){
+  render() {
     this.shadow.innerHTML = `
-    <style>
-    ul {
-        list-style-type: none;
-        padding-left: 20px;
-    }
-    ul ul {
-        margin-left: 20px;
-    }
-    .closed {
-        display: none;
-    }
-
-  </style>
-  `
-  }
-
-  init() {
-
-    this.shadow.innerHTML = "";
-    this.stilo();
+      <style>
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        ul ul {
+            margin-left: 20px;
+        }
+        .closed {
+            display: none;
+        }
+      </style>
+    `;
     var ul = document.createElement("ul");
     this.data.forEach((nodeData) =>{
         var node = this.createTreeNode(nodeData);
@@ -64,13 +68,13 @@ class TreeView extends HTMLElement {
         li.appendChild(span);
     }
     
-    var text = document.createTextNode(" " + nodeData.label);
-    li.appendChild(text);
-
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add("node-checkbox");
     li.appendChild(checkbox);
+    
+    var text = document.createTextNode(" " + nodeData.label);
+    li.appendChild(text);
     
     if (nodeData.children && nodeData.children.length > 0) {
         var ul = document.createElement("ul");
@@ -144,12 +148,10 @@ class TreeView extends HTMLElement {
         var childUl = Li.querySelector("ul");
         if (childUl) {
             var checkboxes = childUl.querySelectorAll(".node-checkbox");
-            checkboxes.forEach((childCheckbox) =>{
-                childCheckbox.checked = checkbox.checked;
+            checkboxes.forEach((childCheckbox) =>{childCheckbox.checked = checkbox.checked;
             });
         }
     }
   }
 }
 customElements.define('tree-view', TreeView);
-
