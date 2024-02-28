@@ -5,26 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TreeView Component</title>
 <style>
-    ul {
-        list-style-type: none;
-        padding-left: 20px;
-    }
-    ul ul {
-        margin-left: 20px;
-    }
-    .closed {
-        display: none;
-    }
 
 </style>
 </head>
+
 <body>
 
-<div id="tree"></div>
-<script type="module">
-    import { TreeView } from './main.js';
-
-    // Datos del árbol
+<tree-view data='[{"label": "Root", "children": [{"label": "Child 1"}, {"label": "Child 2"}, {"label": "Child 3", "children": [{"label": "Grandchild 1"}, {"label": "Grandchild 2"}]}]}]'></tree-view>
+<script src="main.js"></script>
+<script>
     var treeData = [
         { label: "Root", children: [
             { label: "Child 1" },
@@ -37,7 +26,6 @@
     ];
 
     // Crear instancia del componente TreeView
-    var treeView = new TreeView("tree", treeData);
 </script>
 
 
