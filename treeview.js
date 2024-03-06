@@ -82,6 +82,7 @@ class TreeView extends HTMLElement {
             .toggle {
                 cursor: default;
             }
+            
           </style>
         `;
         var ul = document.createElement("ul");
@@ -293,6 +294,28 @@ class TreeView extends HTMLElement {
             console.error('id no corresponde a un li:', error);
         }
     }
+
+    deleteChecked(){
+        var rootUl =this.shadow.getElementById("root")
+        var checkboxes = rootUl.querySelectorAll(".node-checkbox");
+            checkboxes.forEach((childCheckbox) =>{
+                if (childCheckbox.checked=== true){ 
+                    var liCheck =childCheckbox.parentElement;
+                    this.deleteById(liCheck.id)
+                }
+            });
+        }
+/*      var Li = checkbox.parentElement
+        if (Li) {
+            var childUl = Li.querySelector("ul");
+            if (childUl) {
+                var checkboxes = childUl.querySelectorAll(".node-checkbox");
+                checkboxes.forEach((childCheckbox) =>{childCheckbox.checked = checkbox.checked;
+                });
+            }
+        }
+ */
+    
 
     createChildren(childData, id = null) {
     try {        

@@ -1,5 +1,5 @@
 
-    /*
+    
     const treeView = document.createElement('tree-view');
     treeView.id = 'nosee';
     document.body.appendChild(treeView);
@@ -55,13 +55,14 @@
     treeView.createChildren("mu", "3.1");
     treeView.createChildren("ja", "3.1");
     treeView.checkById("3.1.1");
-    treeView.discheckById("3.1.1");
-    treeView.deleteById("3.1.1");
-    treeView.createChildren("jb", "3.1");
+/*    treeView.discheckById("3.1.1");
+   treeView.deleteById("3.1.1");
+   treeView.createChildren("jb", "3.1");
     treeView.createChildren("jc", "3.1.3");
     treeView.checkById("3.1.3");
+    
+    treeView.setStyles( "ul",{color: "blue", "background-color": "black"}); */
     console.log(treeView.getTreeData())
-    treeView.setStyles( "ul",{color: "red", "background-color": "black"});
     
 
     
@@ -78,7 +79,7 @@
     treeView2.createChildren("jc", "3.1.3");
     treeView2.checkById("3.1.3");
     console.log(treeView.getTreeData())
-    treeView2.setStyles( "ul",{color: "red", "background-color": "black"});
+    treeView2.setStyles( "ul",{color: "red", "background-color": "white"});
     document.body.appendChild(treeView2);
 
     }
@@ -89,5 +90,4 @@
     
 
 
-*/
    const treeView3 = document.getElementById('treeview3');
