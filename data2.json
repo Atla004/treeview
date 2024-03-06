@@ -1,0 +1,16 @@
+[
+    {"label": "Rwoot",
+    "children": [
+        {"label": "Child 3"},
+        {"label": "Child 5"}
+    ]},
+    {"label": "Rwoot",
+    "children": [
+    {"label": "Child 3"},
+    {"label": "Child 4",
+    "children": [
+        {"label": "Child 3s"},
+        {"label": "Child 4"}
+    ]}
+    ]}
+]

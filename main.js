@@ -1,157 +1,93 @@
 
+    /*
+    const treeView = document.createElement('tree-view');
+    treeView.id = 'nosee';
+    document.body.appendChild(treeView);
 
-class TreeView extends HTMLElement {
-  constructor() {
-      super();
-      this.attachShadow({ mode: 'open' });
-      this.shadow = this.shadowRoot;
-      this.data = []; 
-      this.urljson = this.getAttribute('dataUrl');
-  }
+    const treeView2 = document.createElement('tree-view');
+    treeView2.id = 'nose';
+    document.body.appendChild(treeView2);
+
+
+    let dataObjeto = () =>{
+        let data = [{
+            label: "root",
+            children: [
+                {label: "child1",
+                    children: [
+                        {label: "child1.1"},
+                        {label: "child1.2"}
+                    ]
+                },
+                {label: "child2"}
+            ]
+        }]
+
+        treeView.setData(data);
     
-  connectedCallback() {
-      this.setData();
-      this.shadow.addEventListener("click", this.handleClick.bind(this));
-      this.shadow.addEventListener("change", this.handleChange.bind(this));
-  }
+    }
 
-  setData() {
-    document.addEventListener('DOMContentLoaded', () => {
-      fetch(this.urljson)
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json();
-      })
-      .then(data => {
-        this.data = data;
-        this.render();
-      })
-      .catch(error => {
-          console.error('Error fetching data:', error);
-          // Aquí puedes manejar el error de manera adecuada, por ejemplo, mostrando un mensaje al usuario
-      });
-    });
-  }
 
-  render() {
-    this.shadow.innerHTML = `
-      <style>
-        ul {
-            list-style-type: none;
-            padding-left: 20px;
-        }
-        ul ul {
-            margin-left: 20px;
-        }
-        .closed {
-            display: none;
-        }
-      </style>
-    `;
-    var ul = document.createElement("ul");
-    this.data.forEach((nodeData) =>{
-        var node = this.createTreeNode(nodeData);
-        ul.appendChild(node);
-    }, this);
-    this.shadow.appendChild(ul);
-  }
-
-  createTreeNode(nodeData) {
-    var li = document.createElement("li");
-
-    if (nodeData.children && nodeData.children.length > 0) {
-        var span = document.createElement("span");
-        span.textContent = "►";
-        span.classList.add("toggle");
-        li.appendChild(span);
+    let dataJson = () =>{
+        let data = [
+            {"label": "Root",
+            "children": [
+                {"label": "Child 3"},
+                {"label": "Child 5"}
+            ]},
+            {"label": "Root",
+            "children": [
+            {"label": "Child 3"},
+            {"label": "Child 4",
+            "children": [
+                {"label": "Child 3"},
+                {"label": "Child 4"}
+            ]}
+            ]}
+        ]
+        treeView.setData(data);
     }
     
-    var checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.classList.add("node-checkbox");
-    li.appendChild(checkbox);
     
-    var text = document.createTextNode(" " + nodeData.label);
-    li.appendChild(text);
+    dataJson();
+    treeView.createChildren("dar");
+    treeView.createChildren("mo", "3");
+    treeView.createChildren("mu", "3.1");
+    treeView.createChildren("ja", "3.1");
+    treeView.checkById("3.1.1");
+    treeView.discheckById("3.1.1");
+    treeView.deleteById("3.1.1");
+    treeView.createChildren("jb", "3.1");
+    treeView.createChildren("jc", "3.1.3");
+    treeView.checkById("3.1.3");
+    console.log(treeView.getTreeData())
+    treeView.setStyles( "ul",{color: "red", "background-color": "black"});
     
-    if (nodeData.children && nodeData.children.length > 0) {
-        var ul = document.createElement("ul");
-        ul.classList.add("closed");
-        nodeData.children.forEach((child) => {
-            var childNode = this.createTreeNode(child);
-            ul.appendChild(childNode);
-        }, this);
-        li.appendChild(ul);
+
+    
+    async function trv() {
+    await treeView2.setDataUrl('data2.json');
+    treeView2.createChildren("dar");
+    treeView2.createChildren("mo", "3");
+    treeView2.createChildren("mu", "3.1");
+    treeView2.createChildren("ja", "3.1");
+    treeView2.checkById("3.1.1");
+    treeView2.discheckById("3.1.1");
+    treeView2.deleteById("3.1.1");
+    treeView2.createChildren("jb", "3.1");
+    treeView2.createChildren("jc", "3.1.3");
+    treeView2.checkById("3.1.3");
+    console.log(treeView.getTreeData())
+    treeView2.setStyles( "ul",{color: "red", "background-color": "black"});
+    document.body.appendChild(treeView2);
+
     }
 
-    return li;
-  }
+    trv();
+    
 
-  handleClick(event) {
-    if (event.target && event.target.classList.contains("toggle")) {
-        var parent = event.target.parentElement;
-        var ul = parent.querySelector("ul");
-        if (ul) {
-            ul.classList.toggle("closed");
-            if (ul.classList.contains("closed")) {
-                event.target.textContent = "►";
-            } else {
-                event.target.textContent = "▼";
-            }
-        }
-    }
-  }
-
-  handleChange(event) {
-      if (event.target && event.target.classList.contains("node-checkbox")) {
-          var checkbox = event.target;
-          this.checks(checkbox);
-      }
-  }
-
-  checks(checkbox) {
-      this.checksToChildren(checkbox);
-      this.checksToFather(checkbox);
-  }
-
-  checksToFather(checkbox){
-    var Li = checkbox.parentElement;   
-    var grandLi = Li.parentElement.parentElement;
+    
 
 
-    if (grandLi) {
-        var grandUl = grandLi.querySelector("ul");
-        var grandCheckbox= grandLi.querySelector("input");
-        var grandUlCheckboxes = grandUl.querySelectorAll(".node-checkbox");
-        if (Array.from(grandUlCheckboxes).some(checkbox => checkbox.checked)){
-            if (Array.from(grandUlCheckboxes).every(checkbox => checkbox.checked)) {
-                grandCheckbox.indeterminate = false;
-                grandCheckbox.checked = true;
-
-            }else{
-                grandCheckbox.indeterminate = true;
-                grandCheckbox.checked = false;
-            }
-        }else{
-            grandCheckbox.indeterminate = false;
-            grandCheckbox.checked = false;
-        }
-        this.checksToFather(grandCheckbox);
-    }
-  }
-
-  checksToChildren(checkbox){
-    var Li = checkbox.parentElement;
-    if (Li) {
-        var childUl = Li.querySelector("ul");
-        if (childUl) {
-            var checkboxes = childUl.querySelectorAll(".node-checkbox");
-            checkboxes.forEach((childCheckbox) =>{childCheckbox.checked = checkbox.checked;
-            });
-        }
-    }
-  }
-}
-customElements.define('tree-view', TreeView);
+*/
+   const treeView3 = document.getElementById('treeview3');

@@ -1,24 +1,22 @@
 [
-    {
-      "label": "Root",
+    {"label": "Root",
       "children": [
-        {
-          "label": "Child 3"
-        },
-        {
-          "label": "Child 2"
-        },
-        {
-          "label": "Child 3",
-          "children": [
-            {
-              "label": "Grandchild 1"
-            },
-            {
-              "label": "Grandchild 2"
-            }
-          ]
-        }
+        {"label": "Child 3"},
+        {"label": "Child 5"}
       ]
-    }
+      
+    },
+
+    {"label": "Root",
+    "children": [
+      {"label": "Child 3s"},
+      {"label": "Child 4",
+      "children": [
+        {"label": "Child 3"},
+        {"label": "Child 4"}
+      ]}
+    ]
+    
+  }
   ]
+
