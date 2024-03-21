@@ -10,12 +10,24 @@
 
 <body>
     
-    
+    <tree-view id="tree" data-url="data.json" ></tree-view>
     
     
     
     <script src="treeview.js" ></script>
-    <script src="main2.js" ></script>
+
+    <script > 
+
+        let x=document.getElementById('tree')
+        let button =document.createElement('button')
+        button.innerHTML="Get Selected"
+        button.addEventListener('click',function(){
+            x.setAttribute('data-url', 'data2.json')
+        });
+        document.body.appendChild(button)
+
+
+    </script>
 
 </body>
 </html>

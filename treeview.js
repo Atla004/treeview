@@ -6,18 +6,38 @@ class TreeView extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.shadow = this.shadowRoot;
         this.data = []; 
-        this.urljson = this.getAttribute('dataUrl');
+        this.urljson = this.getAttribute('data-url');
+    }
+
+    static get observedAttributes() {
+        return ['data-url'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+
+        if (name === 'data-url' && oldValue !== newValue && oldValue !== null) {
+            console.log('Attribute changed:', name, oldValue, newValue);
+            this.urljson = newValue;
+            if (this.urljson)  {
+            let x = this.shadowRoot.getElementById('root');
+            x.remove();
+            this.setDataUrl(this.urljson);
+            }
+        }
     }
     
     connectedCallback() {
         if (this.urljson)  {this.setDataUrl(this.urljson);}
+        this.shadow.addEventListener("click", this.handleClick.bind(this));
+        this.shadow.addEventListener("change", this.handleChange.bind(this));
     }
 
     setDataUrl(urljson) {
         return new Promise((resolve, reject) => {
-            document.addEventListener('DOMContentLoaded', () => {
+
             fetch(urljson)
             .then(response => {
+                
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -26,6 +46,7 @@ class TreeView extends HTMLElement {
             .then(data => {
                 this.data = data;
                 this.render();
+                
                 resolve();
             })
             .catch(error => {
@@ -33,7 +54,7 @@ class TreeView extends HTMLElement {
                 reject();
                 // Aquí puedes manejar el error de manera adecuada, por ejemplo, mostrando un mensaje al usuario
             });
-            });
+            
         })
     }
 
@@ -65,8 +86,7 @@ class TreeView extends HTMLElement {
 
 
     render() {
-        this.shadow.addEventListener("click", this.handleClick.bind(this));
-        this.shadow.addEventListener("change", this.handleChange.bind(this));
+
         this.shadow.innerHTML = `
           <style>
             ul {
